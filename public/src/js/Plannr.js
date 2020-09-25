@@ -8,7 +8,7 @@ const Plannr = (() => {
       localStorage.setItem('[Plannr]', JSON.stringify(storageObj));
     },
     getLastUpdatedDate: function() {
-      return getObj().lastUpdatedDate;
+      return new Date(getObj().lastUpdatedDate);
     },
     setLastUpdateDate: function(date) {
       let storage = getObj();
