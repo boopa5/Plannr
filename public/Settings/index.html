@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="manifest" href="/manifest.json">
+        <link rel="stylesheet" href="../src/css/app.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+        <link href="../src/css/color-picker.min.css" rel="stylesheet">
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        <script src="../src/js/app.js" defer></script>
+        <script src="../src/js/Assignment.js"></script>
+        <script src="../src/js/Plannr.js"></script>
+        <script src="../src/js/settings.js" defer></script>
+        <script src="../src/js/color-picker.min.js"></script>
+    </head>
+    <body>
+
+        <div class="mdl-layout mdl-js-layout">
+            <header class="mdl-layout__header mdl-layout__header--scroll">
+                <div class="mdl-layout__header-row" style="height: 48px">
+                    <span class="mdl-layout-title">Planner</span>
+                </div>
+            </header>
+            <main class="mdl-layout__content">
+                <div class="page-content" style="margin-top: 40px; margin-bottom: 40px">
+                    <div style="width: 80%; margin: auto">
+                        <a href="../index.html" class="mdl-button mdl-js-button mdl-button--icon" style="float: right; width: 50px; height: 50px">
+                            <i class="material-icons" style="top: 50%;left: 38%;font-size: 36px;width: 36px;height: 36px">calendar_today</i>
+                        </a>
+                    </div>
+                    <div id="content" style="width: 80%; margin: auto">
+                        <button id="toggle-theme" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="margin-bottom: 20px; display: none">
+                            Toggle Theme
+                        </button>
+                        <button id="toggle-notif" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                            Enable Notifications (Recommended)
+                        </button>
+                    </div>
+                    <script>
+                        document.getElementById('toggle-theme').innerText = JSON.parse(localStorage.getItem("[Plannr]")).theme === 'light' ? 'dark mode' : 'light mode';
+                        document
+                            .documentElement
+                            .setAttribute('data-theme', JSON.parse(localStorage.getItem("[Plannr]")).theme);
+                        document.getElementById("toggle-theme").addEventListener("click", () => {
+                            let storage = JSON.parse(localStorage.getItem('[Plannr]'));
+                            storage.theme = storage.theme === 'light' ? 'dark' : 'light'
+                            localStorage.setItem('[Plannr]', JSON.stringify(storage))
+                            document
+                                .documentElement
+                                .setAttribute('data-theme', JSON.parse(localStorage.getItem("[Plannr]")).theme);
+                            document.getElementById('toggle-theme').innerText = storage.theme === 'light' ? 'dark mode' : 'light mode';
+                        });
+                        // Notifications
+                        if(Notification.permission === 'denied' || Notification.permission === 'default') {
+                            document.getElementById('toggle-notif').style.display = 'block';
+                        } else {
+                            document.getElementById('toggle-notif').style.display = 'none';
+                        }
+
+                        document.getElementById('toggle-notif').addEventListener('click', () => {
+
+                            // function to actually ask the permissions
+                            const handlePermission = permission => {
+                                // Whatever the user answers, we make sure Chrome stores the information
+                                if(!('permission' in Notification)) {
+                                    Notification.permission = permission;
+                                }
+
+                                // set the button to shown or hidden, depending on what the user answers
+                                if(Notification.permission === 'denied' || Notification.permission === 'default') {
+                                    document.getElementById('toggle-notif').style.display = 'block';
+                                } else {
+                                    document.getElementById('toggle-notif').style.display = 'none';
+                                }
+                            }
+                            if (!('Notification' in window)) {
+                                console.log("This browser does not support notifications.");
+                            } else {
+                                Notification.requestPermission()
+                                    .then(permission => {
+                                        handlePermission(permission);
+                                    });
+                            }
+                        });
+                    </script>
+                    <div id="course-settings" style="width: 80%; margin: auto">
+                        <div style="width: 500px; height: 50px">
+                            <div style="float: left; font-size: 24px">
+                                Courses
+                            </div>
+                            <button id="add-course" class="mdl-button mdl-js-button mdl-js-ripple-effect" style="float: right">
+                                Add Course
+                            </button>
+                        </div>
+                        <div id="settings-course-list"></div>
+
+                    </div>
+                    <div style="width: 80%; margin: auto">
+                        <h5>Automatic Sorting</h5>
+
+                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="toggle-sort" style="width: 30px">
+                            <input type="checkbox" id="toggle-sort" class="mdl-switch__input" checked>
+                            <span class="mdl-switch__label"></span>
+                        </label>
+                        <script>
+                            let toggleSortBtn = document.getElementById('toggle-sort');
+                            if (!Plannr.getSortEnable()) {
+                                toggleSortBtn.removeAttribute('checked');
+                            }
+                            toggleSortBtn.addEventListener('change', () => {
+                                Plannr.toggleSortEnable();
+                            })
+                        </script>
+                    </div>
+                    <div style="width: 80%; margin: auto">
+                        <h5>Transfer to another device</h5>
+                        <button id="export-btn" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="color: white">
+                            Copy Export Data
+                        </button>
+                        <div style="display: block" class="mdl-textfield mdl-js-textfield">
+                            <textarea class="mdl-textfield__input" rows="7" cols="40" type="text" id="import-textarea"></textarea>
+                            <label class="mdl-textfield__label" for="import-textarea">Paste Exported Data Here</label>
+                        </div>
+                        <button id="import-btn" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" style="color: white">
+                            Import
+                        </button>
+                        <div id="copied-toast" class="mdl-js-snackbar mdl-snackbar">
+                            <div class="mdl-snackbar__text"></div>
+                            <button class="mdl-snackbar__action" type="button"></button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </body>
+</html>
