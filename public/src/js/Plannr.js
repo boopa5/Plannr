@@ -13,6 +13,7 @@ const Plannr = (() => {
     setLastUpdateDate: function(date) {
       let storage = getObj();
       storage.lastUpdatedDate = date;
+      localStorage.setItem('[Plannr]', JSON.stringify(storage));
     },
     validateStorage: function(storage) {
       const storageKeys = ['theme', 'assignments', 'reminders', 'courses', 'coursesSet', 'sort', 'deleted'];

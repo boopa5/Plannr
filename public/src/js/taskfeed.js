@@ -129,7 +129,7 @@ function getToday() {
 
 function appendColorBar(taskHtml) {
   let colorDiv = document.createElement('div');
-  let height = getHeight(taskHtml) + 'px'
+  let height = getHeight(taskHtml) + 'px';
   // let height = h + 'px'
 
   colorDiv.style.background = Plannr.getCourse(taskHtml.getAttribute('course-color')).color;
@@ -204,7 +204,7 @@ function swap(arr, n, m) {
 
 function getHeight(element) {
   element = element.cloneNode(true);
-  element.style.visibility = "hidden";
+  // element.style.visibility = "hidden";
   document.body.appendChild(element);
   let height = element.offsetHeight;
   console.log(height)
@@ -268,7 +268,6 @@ function generateTaskHTML(datum) {
   editButton.addEventListener('click',event => {
     scrollPosition = window.scrollY;
     // editAssignmentDate.value = datum.duedate.split('/')[2] + '-' + datum.duedate.split('/')[0] + '-' + (+datum.duedate.split('/')[1]+1)
-    console.log( new Date(...[datum.duedate.split('/')[2], +datum.duedate.split('/')[0] - 1, (+datum.duedate.split('/')[1])]))
     editAssignmentDatePicker.date =  new Date(...[datum.duedate.split('/')[2], +datum.duedate.split('/')[0] - 1, (+datum.duedate.split('/')[1])]);
     editAssignmentDate.value =  datum.duedate
 
