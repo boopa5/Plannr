@@ -55,7 +55,7 @@ let showUpTo = Plannr.parseDate(clockDatePicker.value);
     let etSum = 0;
     Plannr.getAssignments().forEach(a => {
       if (Plannr.parseDate(a.duedate) <= showUpTo){
-        etSum += +a.et;
+        etSum += +(a.et * (1 - (a.progress / 100)));
 
       }
     })
@@ -72,7 +72,7 @@ let showUpTo = Plannr.parseDate(clockDatePicker.value);
 
     //Update time of completion label
     console.log(tOfC.getHours())
-    timeToCompletionLabel.textContent = 'Time of Completion ~ ' + (tOfC.getHours() % 12  === 0 ? 12 : (tOfC.getHours() > 12 ? tOfC.getHours() % 12 : tOfC.getHours())) + ':'+ tOfC.getMinutes() + (tOfC.getHours() >= 12 ? ' PM': ' AM');
+    timeToCompletionLabel.textContent = 'Time of Completion ~ ' + (tOfC.getHours() % 12  === 0 ? 12 : (tOfC.getHours() > 12 ? tOfC.getHours() % 12 : tOfC.getHours())) + ':'+ (tOfC.getMinutes() < 10 ? '0' + tOfC.getMinutes() : tOfC.getMinutes()) + (tOfC.getHours() >= 12 ? ' PM': ' AM');
 
     ctx.fillStyle = '#272727';
     ctx.shadowColor = "black";
