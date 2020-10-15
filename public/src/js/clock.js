@@ -1,5 +1,6 @@
 let clockDatePicker = document.getElementById('clock-datepicker');
 let timeToCompletionLabel = document.getElementById('time-of-completion-label');
+let showUpTo = Plannr.parseDate(clockDatePicker.value);
 
 (() => {
   let canvas = document.getElementById('clock-canvas');
@@ -53,7 +54,10 @@ let timeToCompletionLabel = document.getElementById('time-of-completion-label');
   function calcTimeOfCompletion() {
     let etSum = 0;
     Plannr.getAssignments().forEach(a => {
-      etSum += +a.et;
+      if (Plannr.parseDate(a.duedate) <= showUpTo){
+        etSum += +a.et;
+
+      }
     })
     console.log(etSum)
     return new Date(Date.now() + (etSum * 60000));
@@ -90,7 +94,7 @@ let timeToCompletionLabel = document.getElementById('time-of-completion-label');
       drawLine(x, y, x1, y1);
     }
 
-    let showUpTo = Plannr.parseDate(clockDatePicker.value);
+    showUpTo = Plannr.parseDate(clockDatePicker.value);
     let courses = {};
     Plannr.getCourses().forEach(c => {
       courses[c.id] = 0;
