@@ -1,8 +1,10 @@
 let clockDatePicker = document.getElementById('clock-datepicker');
+let timeToCompletionLabel = document.getElementById('time-of-completion-label');
 
 (() => {
   let canvas = document.getElementById('clock-canvas');
   let ctx = canvas.getContext("2d");
+
 
   canvas.width = 400;
   canvas.height = 400;
@@ -26,6 +28,8 @@ let clockDatePicker = document.getElementById('clock-datepicker');
   let centerY = (canvas.height / 2);
   const radius = 200;
   const tickMarkLength = 10;
+  const barRadius = radius - tickMarkLength - 10;
+  const hourHandLength = 80;
 
   const drawLine = (x, y, x2, y2) => {
     ctx.beginPath();
@@ -46,16 +50,25 @@ let clockDatePicker = document.getElementById('clock-datepicker');
     ctx.fill();
   }
 
-
-
-  const barRadius = radius - tickMarkLength - 10;
-  const hourHandLength = 80;
+  function calcTimeOfCompletion() {
+    let etSum = 0;
+    Plannr.getAssignments().forEach(a => {
+      etSum += +a.et;
+    })
+    console.log(etSum)
+    return new Date(Date.now() + (etSum * 60000));
+  }
 
   function updateClock() {
     let now = new Date();
     let hour = now.getHours() + (now.getMinutes() / 60);
     let startAngle = (-(((hour % 12) / 12) * 360) + 90) * Math.PI / 180;
     let accumulated = 0;
+    let tOfC = calcTimeOfCompletion();
+
+    //Update time of completion label
+    console.log(tOfC.getHours())
+    timeToCompletionLabel.textContent = 'Time of Completion ~ ' + (tOfC.getHours() % 12  === 0 ? 12 : (tOfC.getHours() > 12 ? tOfC.getHours() % 12 : tOfC.getHours())) + ':'+ tOfC.getMinutes() + (tOfC.getHours() >= 12 ? ' PM': ' AM');
 
     ctx.fillStyle = '#272727';
     ctx.shadowColor = "black";

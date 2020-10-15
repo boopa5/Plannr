@@ -16,7 +16,7 @@ const Plannr = (() => {
       localStorage.setItem('[Plannr]', JSON.stringify(storage));
     },
     validateStorage: function(storage) {
-      const storageKeys = ['theme', 'assignments', 'reminders', 'courses', 'coursesSet', 'sort', 'deleted'];
+      const storageKeys = ['theme', 'assignments', 'reminders', 'courses', 'coursesSet', 'sort', 'deleted', 'lastUpdatedDate'];
       for (const key of storageKeys) {
         if (storage[key] === undefined) {
           console.log('Storage structure does not match');
@@ -66,6 +66,11 @@ const Plannr = (() => {
               let bDate = b.duedate.split('/');
               [bDate[0], bDate[1], bDate[2]] = [+bDate[2], +bDate[0] - 1, +bDate[1]];
               bDate = today - new Date(...bDate);
+              if (b.pinned) {
+                return 1;
+              } else if (a.pinned) {
+                return -1;
+              }
               if (+b.progress === 100) {
                   return -1;
               } else if (+a.progress === 100) {
@@ -77,6 +82,11 @@ const Plannr = (() => {
             break;
           case 'Longest Time':
             compareFunc = (a, b) => {
+              if (b.pinned) {
+                return 1;
+              } else if (a.pinned) {
+                return -1;
+              }
               if (+b.progress === 100) {
                 return -1;
               } else if (+a.progress === 100) {
@@ -87,6 +97,11 @@ const Plannr = (() => {
             break;
           case 'Shortest Time':
             compareFunc = (a, b) => {
+              if (b.pinned) {
+                return 1;
+              } else if (a.pinned) {
+                return -1;
+              }
               if (+b.progress === 100) {
                 return -1;
               } else if (+a.progress === 100) {
