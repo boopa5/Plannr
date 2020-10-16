@@ -1,5 +1,5 @@
-const CACHE_STATIC_NAME = 'static-v41';
-const CACHE_DYNAMIC_NAME = 'dynamic-v30';
+const CACHE_STATIC_NAME = 'static-v42';
+const CACHE_DYNAMIC_NAME = 'dynamic-v31';
 const STATIC_FILES = [
   // '/Plannr/',
   // '/Plannr/public/index.html',
