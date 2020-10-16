@@ -123,8 +123,8 @@ let showUpTo = Plannr.parseDate(clockDatePicker.value);
       let lastColor;
       let firstColor;
       for (const course in courses) {
-        firstColor ??= Plannr.getCourse(course).color
         if (courses[course] !== 0) {
+          firstColor ??= Plannr.getCourse(course).color
           lastColor = Plannr.getCourse(course).color
         }
       }
