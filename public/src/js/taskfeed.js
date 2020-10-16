@@ -191,7 +191,7 @@ function appendColorBar(taskHtml) {
   colorDiv.appendChild(courseNameDiv);
   // colorDiv.appendChild(downWrapper);
   taskHtml.firstChild.prepend(colorDiv);
-  taskHtml.style.minWidth = '520px'
+  taskHtml.style.minWidth = '600px'
   return taskHtml;
 }
 
@@ -256,7 +256,7 @@ function generateTaskHTML(datum) {
   nameLabel.style.marginTop = '8px';
   nameLabel.style.float = 'left';
   nameLabel.style.marginBottom = '10px';
-  nameLabel.style.width = '70%';
+  nameLabel.style.width = '430px';
 
   let editButton = document.createElement('button');
   let editIcon = document.createElement('i');
